@@ -4,7 +4,11 @@ import User from "../models/User";
 export interface IUserRepo {
   getUserByToken(token: string): Promise<UserDoc | null>;
   getUserByEmail(email: string): Promise<UserDoc | null>;
-  createNewUser: (user: UserType) => Promise<UserDoc>;
+  createNewUser(user: UserType): Promise<UserDoc>;
+  findUserAndUpdate(
+    token: string,
+    updates: Partial<UserType>,
+  ): Promise<UserDoc | null>;
 }
 
 export class UserRepo implements IUserRepo {
@@ -24,5 +28,11 @@ export class UserRepo implements IUserRepo {
     const newUser = new User(user);
 
     return newUser;
+  }
+
+  async findUserAndUpdate(token: string, updates: Partial<UserType>) {
+    const user = await User.findOneAndUpdate({ token }, { $set: updates });
+
+    return user;
   }
 }

@@ -1,9 +1,9 @@
 import express from "express";
 
 import * as AdsController from "./controllers/Ads.controller";
-import * as UserController from "./controllers/User.controller";
 import { routePrivate } from "./middlewares/Auth";
 import AuthController from "./services/AuthService";
+import UserController from "./services/UserService"
 
 const router = express.Router();
 

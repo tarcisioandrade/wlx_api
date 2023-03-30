@@ -11,20 +11,20 @@ import {
   validatorSignupSchema,
 } from "../validators/AuthValidatorsSchemas";
 
-type Validator = typeof validator;
-type Bcrypt = typeof bcrypt;
+export type ValidatorType = typeof validator;
+export type BcryptType = typeof bcrypt;
 
 class AuthController {
   private userRepo: IUserRepo;
   private stateRepo: IStateRepo;
-  private validator: Validator;
-  private bcrypt: Bcrypt;
+  private validator: ValidatorType;
+  private bcrypt: BcryptType;
 
   constructor(
     userRepo: IUserRepo,
     stateRepo: IStateRepo,
-    validator: Validator,
-    bcrypt: Bcrypt,
+    validator: ValidatorType,
+    bcrypt: BcryptType,
   ) {
     this.userRepo = userRepo;
     this.stateRepo = stateRepo;

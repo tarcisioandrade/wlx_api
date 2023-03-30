@@ -1,98 +1,136 @@
-import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { ZodError } from "zod";
 
 import { Ad as AdType } from "../@types/Ad";
 import { User as UserType } from "../@types/User";
-import Ad from "../models/Ad";
-import Category from "../models/Category";
-import State from "../models/State";
-import User from "../models/User";
-import validator from "../utils/Validator";
+import { IAdRepo } from "../repository/adRepo";
+import { ICategoryRepo } from "../repository/categoryRepo";
+import { IStateRepo } from "../repository/stateRepo";
+import { IUserRepo } from "../repository/userRepo";
+import zodErrorFormatter from "../utils/ZodErrorFormatter";
 import { userValidatorSchema } from "../validators/UserValidatorSchema";
+import { BcryptType, ValidatorType } from "./Auth.controller";
 
-export const getStates = async (req: Request, res: Response) => {
-  const states = await State.find();
-  res.json({ states });
-};
+class UserController {
+  private userRepo: IUserRepo;
+  private stateRepo: IStateRepo;
+  private adRepo: IAdRepo;
+  private categoryRepo: ICategoryRepo;
+  private bcrypt: BcryptType;
+  private validator: ValidatorType;
 
-export const info = async (req: Request, res: Response) => {
-  const token = req.cookies.token;
+  constructor(
+    userRepo: IUserRepo,
+    stateRepo: IStateRepo,
+    adRepo: IAdRepo,
+    categoryRepo: ICategoryRepo,
+    bcrypt: BcryptType,
+    validator: ValidatorType,
+  ) {
+    this.userRepo = userRepo;
+    this.stateRepo = stateRepo;
+    this.adRepo = adRepo;
+    this.categoryRepo = categoryRepo;
+    this.bcrypt = bcrypt;
+    this.validator = validator;
 
-  const user = await User.findOne({
-    token,
-  });
-
-  const state = await State.findById(user?.state);
-  const ads = await Ad.find({ id_user: user?._id });
-  let adsList: AdType[] = [];
-
-  for (let i in ads) {
-    const categ = await Category.findById(ads[i].category);
-
-    adsList.push({ ...ads[i], category: categ!.slug });
+    this.getStates = this.getStates.bind(this);
+    this.info = this.info.bind(this);
+    this.editAction = this.editAction.bind(this);
   }
 
-  res.status(200).json({
-    name: user?.name,
-    email: user?.email,
-    state: state?.name,
-    ads: adsList,
-  });
-};
+  async getStates(req: Request, res: Response) {
+    const states = await this.stateRepo.getStates();
 
-export const editAction = async (req: Request, res: Response) => {
-  try {
-    validator(req.body, userValidatorSchema);
+    res.status(200).json({ states });
+  }
+
+  async info(req: Request, res: Response) {
     const token = req.cookies.token;
 
-    let updates: Partial<UserType> = {};
+    const user = await this.userRepo.getUserByToken(token);
 
-    if (req.body.name) {
-      updates.name = req.body.name;
+    const state = await this.stateRepo.getStateByID(user!.state);
+    const ads = await this.adRepo.getAdsByUserId(user!._id.toString());
+    let adsList: AdType[] = [];
+
+    for (let i in ads) {
+      const categ = await this.categoryRepo.getCategoryById(ads[i].category);
+
+      adsList.push({
+        id: ads[i].id,
+        idUser: ads[i].idUser,
+        title: ads[i].title,
+        category: categ!.slug,
+        description: ads[i].description,
+        price: ads[i].price,
+        price_negotiable: ads[i].price_negotiable,
+        images: ads[i].images,
+        views: ads[i].views,
+        state: ads[i].state,
+        status: ads[i].status,
+        created_at: ads[i].created_at,
+      });
     }
 
-    if (req.body.email) {
-      const emailCheck = await User.findOne({ email: req.body.email });
-      if (emailCheck) {
-        res.status(400).json({ error: "E-mail already exist." });
-        return;
+    res.status(200).json({
+      name: user?.name,
+      email: user?.email,
+      state: state?.name,
+      ads: adsList,
+    });
+  }
+
+  async editAction(req: Request, res: Response) {
+    try {
+      this.validator(req.body, userValidatorSchema);
+      const token = req.cookies.token;
+
+      let updates: Partial<UserType> = {};
+
+      if (req.body.name) {
+        updates.name = req.body.name;
       }
-      updates.email = req.body.email;
-    }
 
-    if (req.body.state) {
-      if (mongoose.Types.ObjectId.isValid(req.body.state)) {
-        const stateCheck = await State.findById(req.body.state);
-        if (!stateCheck) {
-          res.status(400).json({ error: "State not found." });
+      if (req.body.email) {
+        const emailCheck = await this.userRepo.getUserByEmail(req.body.email);
+        if (emailCheck) {
+          res.status(400).json({ error: "Email already in use." });
           return;
         }
-        updates.state = req.body.state;
+        updates.email = req.body.email;
+      }
+
+      if (req.body.state) {
+        if (mongoose.Types.ObjectId.isValid(req.body.state)) {
+          const stateCheck = await this.stateRepo.getStateByID(req.body.state);
+          if (!stateCheck) {
+            res.status(400).json({ error: "State not found." });
+            return;
+          }
+          updates.state = req.body.state;
+        } else {
+          res.status(400).json({ error: "Invalid state." });
+          return;
+        }
+      }
+
+      if (req.body.password) {
+        updates.password = await this.bcrypt.hash(req.body.password, 10);
+      }
+
+      await this.userRepo.findUserAndUpdate(token, updates);
+
+      res.sendStatus(200);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({ error: zodErrorFormatter(error) });
       } else {
-        res.status(400).json({ error: "Invalid state." });
-        return;
+        console.log(error);
       }
     }
-
-    if (req.body.password) {
-      updates.password = await bcrypt.hash(req.body.password, 10);
-    }
-
-    await User.findOneAndUpdate({ token }, { $set: updates });
-
-    res.status(200).end();
-  } catch (error) {
-    if (error instanceof ZodError) {
-      const errorMessage = error.issues.map((issue) => {
-        return {
-          path: issue.path[0],
-          message: issue.message,
-        };
-      });
-
-      res.status(400).json({ error: errorMessage });
-    }
   }
-};
+}
+
+export default UserController;

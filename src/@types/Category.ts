@@ -1,3 +1,5 @@
+import { HydratedDocument } from "mongoose";
+
 export type Category = {
   name: string;
   slug: string;
@@ -7,3 +9,5 @@ export type Category = {
 export type Categories = {
   img: string;
 } & Category;
+
+export type CategoryDoc = HydratedDocument<Category>;

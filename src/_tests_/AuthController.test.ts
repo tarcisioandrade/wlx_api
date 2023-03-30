@@ -1,26 +1,12 @@
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 
-import { State } from "../@types/State";
-import { User } from "../@types/User";
 import AuthController from "../controllers/Auth.controller";
 import validator from "../utils/Validator";
-import MockStateRepo from "./mocks/mockStateRepo";
-import MockUserRepo from "./mocks/mockUserRepo";
+import { fakeState, MockStateRepo } from "./mocks/mockStateRepo";
+import { fakeUser, MockUserRepo } from "./mocks/mockUserRepo";
 
 let authController: AuthController;
-
-const fakeUser: User = {
-  email: "Teste@gmail.com",
-  name: "Teste",
-  password: "123456",
-  token: "MeuToken",
-  state: "BA",
-};
-
-const fakeState: State = {
-  name: "6418592cae6ab60490031ca0",
-};
 
 const mockResponse = () => {
   const res = {} as Response;
@@ -39,10 +25,10 @@ const mockResponse = () => {
 
 describe("AuthController", () => {
   beforeEach(async () => {
-    const useRepo = new MockUserRepo(fakeUser);
+    const userRepo = new MockUserRepo(fakeUser);
     const stateRepo = new MockStateRepo(fakeState);
 
-    authController = new AuthController(useRepo, stateRepo, validator, bcrypt);
+    authController = new AuthController(userRepo, stateRepo, validator, bcrypt);
   });
 
   afterEach(() => {

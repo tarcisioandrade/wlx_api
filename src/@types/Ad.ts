@@ -1,4 +1,4 @@
-import { Types } from "mongoose";
+import { HydratedDocument, Types } from "mongoose";
 
 type ImagesAd = {
   url: string;
@@ -6,8 +6,8 @@ type ImagesAd = {
 };
 
 export type Ad = {
-  id: Types.ObjectId;
-  idUser: Types.ObjectId;
+  id: Types.ObjectId | string;
+  idUser: Types.ObjectId | string;
   category: string;
   images: ImagesAd[];
   created_at: Date;
@@ -23,3 +23,5 @@ export type Ad = {
 export type AdsList = {
   image: string;
 } & Pick<Ad, "id" | "title" | "price" | "price_negotiable">;
+
+export type AdDoc = HydratedDocument<Ad>;

@@ -3,6 +3,7 @@ import State from "../models/State";
 
 export interface IStateRepo {
   getStateByID(stateId: string): Promise<StateDoc | null>;
+  getStates(): Promise<StateDoc[]>;
 }
 
 export class StateRepo implements IStateRepo {
@@ -10,5 +11,11 @@ export class StateRepo implements IStateRepo {
     const state = await State.findById(stateId);
 
     return state;
+  }
+
+  async getStates() {
+    const states = await State.find();
+
+    return states;
   }
 }
