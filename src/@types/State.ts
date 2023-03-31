@@ -1,7 +1,7 @@
 import { HydratedDocument } from "mongoose";
 
-export type State = {
+export type StateType = {
   name: string;
-}
+};
 
-export type StateDoc = HydratedDocument<State>;
+export type StateDoc = HydratedDocument<StateType>;

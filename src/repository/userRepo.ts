@@ -1,4 +1,4 @@
-import { UserDoc, User as UserType } from "../@types/User";
+import { UserDoc, UserType } from "../@types/User";
 import User from "../models/User";
 
 export interface IUserRepo {

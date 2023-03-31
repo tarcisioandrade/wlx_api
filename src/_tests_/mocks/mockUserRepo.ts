@@ -1,9 +1,9 @@
 import { HydratedDocument } from "mongoose";
 
-import { User, UserDoc } from "../../@types/User";
+import { UserType, UserDoc } from "../../@types/User";
 import { IUserRepo } from "../../repository/userRepo";
 
-type UserWithID = User & { _id: string };
+type UserWithID = UserType & { _id: string };
 
 export const fakeUser: UserWithID = {
   _id: "6418592cae6ab60490031sa1",
@@ -17,7 +17,7 @@ export const fakeUser: UserWithID = {
 export class MockUserRepo implements IUserRepo {
   private users: UserDoc[];
 
-  constructor(User: User) {
+  constructor(User: UserType) {
     this.users = [User] as UserDoc[];
     this.users[0].save = jest.fn().mockReturnValue(this.users[0]);
   }
@@ -25,23 +25,23 @@ export class MockUserRepo implements IUserRepo {
   async getUserByEmail(email: string) {
     const user = this.users.find((user) => user.email === email) || null;
 
-    return Promise.resolve(user);
+    return user;
   }
 
   async getUserByToken(token: string) {
     const user = this.users.find((user) => user.token === token) || null;
 
-    return Promise.resolve(user);
+    return user;
   }
 
-  async createNewUser(user: User) {
+  async createNewUser(user: UserType) {
     let newUser = user as UserDoc;
     newUser.save = jest.fn().mockReturnValue(newUser);
 
-    return Promise.resolve(newUser);
+    return newUser;
   }
 
-  async findUserAndUpdate(token: string, updates: Partial<User>) {
+  async findUserAndUpdate(token: string, updates: Partial<UserType>) {
     const user = this.users.find((user) => user.token === token) || null;
 
     if (user) {
@@ -51,7 +51,7 @@ export class MockUserRepo implements IUserRepo {
       user.state = updates.state || user.state;
     }
 
-    return Promise.resolve(user);
+    return user;
   }
 }
 

@@ -1,8 +1,8 @@
 import mongoose, { Model } from "mongoose";
 
-import { User } from "../@types/User";
+import { UserType } from "../@types/User";
 
-const userSchema = new mongoose.Schema<User>({
+const userSchema = new mongoose.Schema<UserType>({
   name: String,
   email: String,
   state: String,
@@ -13,5 +13,5 @@ const userSchema = new mongoose.Schema<User>({
 const modelName = "User";
 
 export default mongoose.connection && mongoose.connection.models[modelName]
-  ? (mongoose.connection.models[modelName] as Model<User>)
-  : mongoose.model<User>(modelName, userSchema);
+  ? (mongoose.connection.models[modelName] as Model<UserType>)
+  : mongoose.model<UserType>(modelName, userSchema);

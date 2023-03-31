@@ -1,8 +1,8 @@
 import mongoose, { connection, Model } from "mongoose";
 
-import { Ad } from "../@types/Ad";
+import { AdType } from "../@types/Ad";
 
-const adSchema = new mongoose.Schema<Ad>({
+const adSchema = new mongoose.Schema<AdType>({
   id: String,
   idUser: String,
   category: String,
@@ -20,5 +20,5 @@ const adSchema = new mongoose.Schema<Ad>({
 const modelName = "Ad";
 
 export default connection && connection.models[modelName]
-  ? (connection.models[modelName] as Model<Ad>)
-  : mongoose.model<Ad>(modelName, adSchema);
+  ? (connection.models[modelName] as Model<AdType>)
+  : mongoose.model<AdType>(modelName, adSchema);

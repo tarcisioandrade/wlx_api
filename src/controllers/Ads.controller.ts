@@ -5,7 +5,7 @@ import { Request, Response } from "express";
 import jimp from "jimp";
 import mongoose, { Types } from "mongoose";
 
-import { AdsList, Ad as AdType } from "../@types/Ad";
+import { AdsList, AdType } from "../@types/Ad";
 import { Categories } from "../@types/Category";
 import Ad from "../models/Ad";
 import Category from "../models/Category";

@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { ZodError } from "zod";
 
-import { Ad as AdType } from "../@types/Ad";
-import { User as UserType } from "../@types/User";
+import { AdType } from "../@types/Ad";
+import { UserType } from "../@types/User";
 import { IAdRepo } from "../repository/adRepo";
 import { ICategoryRepo } from "../repository/categoryRepo";
 import { IStateRepo } from "../repository/stateRepo";

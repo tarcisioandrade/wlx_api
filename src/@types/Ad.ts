@@ -5,7 +5,7 @@ type ImagesAd = {
   default: boolean;
 };
 
-export type Ad = {
+export type AdType = {
   id: Types.ObjectId | string;
   idUser: Types.ObjectId | string;
   category: string;
@@ -22,6 +22,6 @@ export type Ad = {
 
 export type AdsList = {
   image: string;
-} & Pick<Ad, "id" | "title" | "price" | "price_negotiable">;
+} & Pick<AdType, "id" | "title" | "price" | "price_negotiable">;
 
-export type AdDoc = HydratedDocument<Ad>;
+export type AdDoc = HydratedDocument<AdType>;

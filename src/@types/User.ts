@@ -1,6 +1,6 @@
 import { HydratedDocument } from "mongoose";
 
-export type User = {
+export type UserType = {
   name: string;
   email: string;
   state: string;
@@ -8,4 +8,4 @@ export type User = {
   token: string;
 };
 
-export type UserDoc = HydratedDocument<User>;
+export type UserDoc = HydratedDocument<UserType>;
