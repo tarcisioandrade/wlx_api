@@ -1,9 +1,9 @@
 import express from "express";
 
-import * as AdsController from "./controllers/Ads.controller";
 import { routePrivate } from "./middlewares/Auth";
+import AdsController from "./services/AdsService";
 import AuthController from "./services/AuthService";
-import UserController from "./services/UserService"
+import UserController from "./services/UserService";
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.patch("/user/me", routePrivate, UserController.editAction);
 router.get("/categories", AdsController.getCategories);
 
 router.post("/ad/add", routePrivate, AdsController.addAction);
-router.get("/ad/list", AdsController.getList);
+router.get("/ad/all", AdsController.getAds);
 router.get("/ad/:id", AdsController.getItem);
 router.post("/ad/:id", routePrivate, AdsController.editAction);
 router.delete("/ad/:id", routePrivate, AdsController.deleteAction);

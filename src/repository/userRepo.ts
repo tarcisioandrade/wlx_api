@@ -4,6 +4,7 @@ import User from "../models/User";
 export interface IUserRepo {
   getUserByToken(token: string): Promise<UserDoc | null>;
   getUserByEmail(email: string): Promise<UserDoc | null>;
+  getUserById(id: string): Promise<UserDoc | null>;
   createNewUser(user: UserType): Promise<UserDoc>;
   findUserAndUpdate(
     token: string,
@@ -24,6 +25,12 @@ export class UserRepo implements IUserRepo {
     return user;
   }
 
+  async getUserById(id: string) {
+    const user = await User.findById(id);
+
+    return user;
+  }
+  
   async createNewUser(user: UserType) {
     const newUser = new User(user);
 

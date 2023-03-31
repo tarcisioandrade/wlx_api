@@ -4,7 +4,7 @@ import { ZodError } from "zod";
 
 import { AdType } from "../@types/Ad";
 import { UserType } from "../@types/User";
-import { IAdRepo } from "../repository/adRepo";
+import { IAdsRepo } from "../repository/adRepo";
 import { ICategoryRepo } from "../repository/categoryRepo";
 import { IStateRepo } from "../repository/stateRepo";
 import { IUserRepo } from "../repository/userRepo";
@@ -15,7 +15,7 @@ import { BcryptType, ValidatorType } from "./Auth.controller";
 class UserController {
   private userRepo: IUserRepo;
   private stateRepo: IStateRepo;
-  private adRepo: IAdRepo;
+  private adRepo: IAdsRepo;
   private categoryRepo: ICategoryRepo;
   private bcrypt: BcryptType;
   private validator: ValidatorType;
@@ -23,7 +23,7 @@ class UserController {
   constructor(
     userRepo: IUserRepo,
     stateRepo: IStateRepo,
-    adRepo: IAdRepo,
+    adRepo: IAdsRepo,
     categoryRepo: ICategoryRepo,
     bcrypt: BcryptType,
     validator: ValidatorType,
@@ -52,7 +52,7 @@ class UserController {
     const user = await this.userRepo.getUserByToken(token);
 
     const state = await this.stateRepo.getStateByID(user!.state);
-    const ads = await this.adRepo.getAdsByUserId(user!._id.toString());
+    const ads = await this.adRepo.getAdsByUserId(null, user!._id.toString());
     let adsList: AdType[] = [];
 
     for (let i in ads) {
