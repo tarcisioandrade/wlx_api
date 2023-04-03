@@ -1,3 +1,5 @@
+import fs from "fs";
+
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 
@@ -7,7 +9,6 @@ import { ICategoryRepo } from "../repository/categoryRepo";
 import { IStateRepo } from "../repository/stateRepo";
 import { IUserRepo } from "../repository/userRepo";
 import imageBuilder from "../utils/imageBuilder";
-import fs from "fs";
 
 type ImageBuilder = typeof imageBuilder;
 
@@ -67,13 +68,13 @@ class AdsController {
       if (stateDoc) filters.state = stateDoc._id;
     }
 
-    const totalAds = await this.adRepo.getTotalAds();
     const adsData = await this.adRepo.getAds(
       filters,
       sort as string,
       Number(offset),
       Number(limit),
     );
+    const totalAds = adsData.length;
 
     let ads: AdsList[] = [];
 
@@ -89,7 +90,7 @@ class AdsController {
       }
 
       ads.push({
-        id: adsData[i]._id,
+        _id: adsData[i]._id,
         title: adsData[i].title,
         price: adsData[i].price,
         price_negotiable: adsData[i].price_negotiable,
@@ -157,7 +158,7 @@ class AdsController {
             : `${process.env.BASE}/assets/images/default.jpg`;
 
           return {
-            id: otherAd._id,
+            _id: otherAd._id,
             title: otherAd.title,
             price: otherAd.price,
             price_negotiable: otherAd.price_negotiable,
@@ -178,7 +179,7 @@ class AdsController {
             : `${process.env.BASE}/assets/images/default.jpg`;
 
           return {
-            id: otherAd._id,
+            _id: otherAd._id,
             title: otherAd.title,
             price: otherAd.price,
             price_negotiable: otherAd.price_negotiable,
@@ -187,7 +188,7 @@ class AdsController {
         });
     }
 
-    res.json({
+    res.status(200).json({
       id: ad._id,
       title: ad.title,
       price: ad.price,
@@ -217,12 +218,12 @@ class AdsController {
       return;
     }
 
-    if (mongoose.Types.ObjectId.isValid(categ)) {
+    if (!mongoose.Types.ObjectId.isValid(categ)) {
       res.status(400).json({ error: "Invalid Category!" });
       return;
     }
 
-    const category = await this.categoryRepo.getCategoryBySlug(categ);
+    const category = await this.categoryRepo.getCategoryById(categ);
 
     if (!category) {
       res.status(400).json({ error: "Category not found!" });
@@ -271,6 +272,9 @@ class AdsController {
             req.files.img.mimetype,
           )
         ) {
+          console.log("req.files", req.files.img);
+
+          console.log("req.files.img.data", req.files.img.data);
           const urlImage = await this.imageBuilder(req.files.img.data);
           newAd.images.push({
             url: urlImage,
@@ -285,7 +289,7 @@ class AdsController {
     }
 
     const info = await newAd.save();
-    res.json({ id: info._id });
+    res.status(200).json({ id: info._id });
   }
 
   async editAction(req: Request, res: Response) {
@@ -388,7 +392,7 @@ class AdsController {
 
     await this.adRepo.getAdAndUpdate(id, updates);
 
-    res.status(200).end();
+    res.sendStatus(200);
   }
 
   async deleteAction(req: Request, res: Response) {
@@ -419,7 +423,7 @@ class AdsController {
 
     await ad.deleteOne();
 
-    res.status(200).end();
+    res.sendStatus(200);
   }
 }
 

@@ -3,7 +3,6 @@ import mongoose, { connection, Model } from "mongoose";
 import { AdType } from "../@types/Ad";
 
 const adSchema = new mongoose.Schema<AdType>({
-  id: String,
   idUser: String,
   category: String,
   images: [Object],

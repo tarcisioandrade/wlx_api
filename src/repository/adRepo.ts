@@ -5,7 +5,7 @@ import Ad from "../models/Ad";
 
 export type Filters = {
   status: boolean;
-  title?: Record<"$regex" | "$options", unknown>;
+  title?: Record<"$regex" | "$options", any>;
   category?: Types.ObjectId;
   state?: Types.ObjectId;
 };
@@ -19,7 +19,6 @@ export interface IAdsRepo {
     offset: number,
     limit: number,
   ): Promise<AdDoc[]>;
-  getTotalAds(): Promise<number>;
   getAdItem(id: string): Promise<AdDoc | null>;
   getAdAndUpdate(id: string, updates: Partial<AdType>): Promise<AdDoc | null>;
   createNewAd(): Promise<AdDoc>;
@@ -48,12 +47,6 @@ export class AdRepo implements IAdsRepo {
       .limit(limit);
 
     return ads;
-  }
-
-  async getTotalAds() {
-    const total = await Ad.countDocuments();
-
-    return total;
   }
 
   async getAdItem(id: string) {

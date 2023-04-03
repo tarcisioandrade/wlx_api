@@ -20,6 +20,12 @@ export class MockStateRepo implements IStateRepo {
     return stateTarget;
   }
 
+  async getStateByName(state: string) {
+    const stateTarget = this.states.find((State) => State.name === state) || null;
+
+    return stateTarget;
+  }
+
   async getStates() {
     return this.states;
   }

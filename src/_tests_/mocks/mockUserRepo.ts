@@ -1,4 +1,4 @@
-import { HydratedDocument } from "mongoose";
+import { Document, HydratedDocument, Types } from "mongoose";
 
 import { UserType, UserDoc } from "../../@types/User";
 import { IUserRepo } from "../../repository/userRepo";
@@ -30,6 +30,12 @@ export class MockUserRepo implements IUserRepo {
 
   async getUserByToken(token: string) {
     const user = this.users.find((user) => user.token === token) || null;
+
+    return user;
+  }
+
+  async getUserById(id: string) {
+    const user = this.users.find((user) => user._id.toString() === id) || null;
 
     return user;
   }

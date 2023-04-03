@@ -1,6 +1,6 @@
 import { randomUUID } from "crypto";
-import jimp from "jimp";
 
+import jimp from "jimp";
 
 async function imageBuilder(buffer: Buffer) {
   const newName = `${randomUUID()}.jpg`;

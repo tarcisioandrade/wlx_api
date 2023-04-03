@@ -59,7 +59,7 @@ class UserController {
       const categ = await this.categoryRepo.getCategoryById(ads[i].category);
 
       adsList.push({
-        id: ads[i].id,
+        _id: ads[i]._id,
         idUser: ads[i].idUser,
         title: ads[i].title,
         category: categ!.slug,

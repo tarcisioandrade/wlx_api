@@ -6,7 +6,7 @@ type ImagesAd = {
 };
 
 export type AdType = {
-  id: Types.ObjectId | string;
+  _id: Types.ObjectId | string;
   idUser: Types.ObjectId | string;
   category: string;
   images: ImagesAd[];
@@ -22,6 +22,6 @@ export type AdType = {
 
 export type AdsList = {
   image: string;
-} & Pick<AdType, "id" | "title" | "price" | "price_negotiable">;
+} & Pick<AdType, "_id" | "title" | "price" | "price_negotiable">;
 
 export type AdDoc = HydratedDocument<AdType>;
