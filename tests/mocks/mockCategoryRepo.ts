@@ -1,5 +1,5 @@
-import { Categories, CategoryDoc, CategoryType } from "../../@types/Category";
-import { ICategoryRepo } from "../../repository/categoryRepo";
+import { Categories, CategoryDoc, CategoryType } from "@/@types/Category";
+import { ICategoryRepo } from "@/repository/categoryRepo";
 
 require("dotenv").config();
 

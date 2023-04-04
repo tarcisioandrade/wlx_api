@@ -1,7 +1,5 @@
-import { Document, HydratedDocument, Types } from "mongoose";
-
-import { UserType, UserDoc } from "../../@types/User";
-import { IUserRepo } from "../../repository/userRepo";
+import { UserDoc, UserType } from "@/@types/User";
+import { IUserRepo } from "@/repository/userRepo";
 
 type UserWithID = UserType & { _id: string };
 
@@ -60,4 +58,3 @@ export class MockUserRepo implements IUserRepo {
     return user;
   }
 }
-

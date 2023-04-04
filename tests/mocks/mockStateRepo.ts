@@ -1,5 +1,5 @@
-import { StateDoc, StateType } from "../../@types/State";
-import { IStateRepo } from "../../repository/stateRepo";
+import { StateDoc, StateType } from "@/@types/State";
+import { IStateRepo } from "@/repository/stateRepo";
 
 export const fakeState: StateType = {
   name: "6418592cae6ab60490031ca0",

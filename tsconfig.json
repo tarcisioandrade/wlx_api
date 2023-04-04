@@ -7,8 +7,12 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "rootDir": "./src",
-    "outDir": "./dist"
+    "rootDir": ".",
+    "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+    }
   },
-  "exclude": ["node_modules",  "src/_tests_"]
+  "exclude": ["node_modules", "src/_tests_"]
 }

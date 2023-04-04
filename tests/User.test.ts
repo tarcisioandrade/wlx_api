@@ -1,12 +1,11 @@
-import bcrypt from "bcrypt";
-import { Request, Response } from "express";
-
-import UserController from "../controllers/User.controller";
-import validator from "../utils/Validator";
+import UserController from "@/controllers/User.controller";
+import validator from "@/utils/Validator";
 import { fakeAd, MockAdRepo } from "./mocks/mockAdRepo";
 import { fakeCategory, MockCategoryRepo } from "./mocks/mockCategoryRepo";
 import { fakeState, MockStateRepo } from "./mocks/mockStateRepo";
 import { fakeUser, MockUserRepo } from "./mocks/mockUserRepo";
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
 
 let userController: UserController;
 

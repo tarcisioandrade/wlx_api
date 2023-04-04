@@ -1,12 +1,12 @@
-import { Request, Response } from "express";
+import fs from "fs";
 
-import AdsController from "../controllers/Ads.controller";
-import imageBuilder from "../utils/imageBuilder";
+import AdsController from "@/controllers/Ads.controller";
+import imageBuilder from "@/utils/imageBuilder";
 import { fakeAd, MockAdRepo } from "./mocks/mockAdRepo";
 import { fakeCategory, MockCategoryRepo } from "./mocks/mockCategoryRepo";
 import { fakeState, MockStateRepo } from "./mocks/mockStateRepo";
 import { fakeUser, MockUserRepo } from "./mocks/mockUserRepo";
-import fs from "fs";
+import { Request, Response } from "express";
 
 require("dotenv").config();
 
@@ -168,7 +168,7 @@ describe("AdsController", () => {
     };
 
     jest.spyOn(fs, "unlinkSync").mockImplementation(() => true);
-    
+
     await adsController.deleteAction(req, res);
 
     expect(res.sendStatus).toHaveBeenCalledWith(200);

@@ -1,10 +1,9 @@
-import bcrypt from "bcrypt";
-import { Request, Response } from "express";
-
-import AuthController from "../controllers/Auth.controller";
-import validator from "../utils/Validator";
+import AuthController from "@/controllers/Auth.controller";
+import validator from "@/utils/Validator";
 import { fakeState, MockStateRepo } from "./mocks/mockStateRepo";
 import { fakeUser, MockUserRepo } from "./mocks/mockUserRepo";
+import bcrypt from "bcrypt";
+import { Request, Response } from "express";
 
 let authController: AuthController;
 

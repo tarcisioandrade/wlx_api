@@ -1,5 +1,5 @@
-import { AdDoc, AdType } from "../../@types/Ad";
-import { Filters, IAdsRepo } from "../../repository/adRepo";
+import { AdDoc, AdType } from "@/@types/Ad";
+import { Filters, IAdsRepo } from "@/repository/adRepo";
 
 export let fakeAd: AdType = {
   _id: "641c42136dc310a5d652c767",
