@@ -63,7 +63,7 @@ class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-        domain: ".onrender.com",
+        domain: "wlx-app.vercel.app",
         maxAge: 3600000,
       });
 
@@ -112,7 +112,7 @@ class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-        domain: ".onrender.com",
+        domain: "wlx-app.vercel.app",
         maxAge: 3600000,
       });
 
