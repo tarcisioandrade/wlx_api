@@ -61,8 +61,8 @@ class AuthController {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        // secure: process.env.NODE_ENV === "production",
+        // sameSite: "strict",
         maxAge: 3600000,
       });
 
@@ -109,8 +109,8 @@ class AuthController {
 
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "none",
+        // secure: process.env.NODE_ENV === "production",
+        // sameSite: "strict",
         maxAge: 3600000,
       });
 
