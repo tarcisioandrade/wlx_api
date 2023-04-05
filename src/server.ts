@@ -32,5 +32,5 @@ app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", routes);
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.BASE}`);
+  console.log(`Server is running on port ${process.env.BASE}, amb: ${process.env.NODE_ENV}`);
 });
